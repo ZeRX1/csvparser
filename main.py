@@ -13,12 +13,6 @@ import pandas as pd
 from reactivex import operators as ops
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 
-##
-#?   influxDB: 192.168.7.206:8086
-#?   login: synapse
-#?   password: synapseff
-##
-
 ####
 # *   Sources used:
 # *   https://github.com/influxdata/influxdb-client-python
