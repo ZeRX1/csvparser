@@ -44,7 +44,7 @@ def writeToInflux(client, bucket, name, tag1, tag2, field1, field2):
     pass
 
 def SemiRandomSamples(client, bucket):
-    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town"]
+    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town", "Warsaw", "Barcelona", "Madrid", "Berlin", "London", "Detroit", "Los Angeles", "London", "San Francisco"]
 
     randcity = arrcity[random.randrange(0,5)]
     randtemp = round(random.uniform(-10.00, 45.00), 2)
