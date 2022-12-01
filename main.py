@@ -13,6 +13,7 @@ import pandas as pd
 from reactivex import operators as ops
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 import random
+import csv
 
 ####
 # *   Sources used:
@@ -90,12 +91,8 @@ if __name__ == "__main__":
 
 
 
-    with open('influxdata.csv', 'w', encoding='UTF8') as f:
-    # create the csv writer
-        writer = csv.writer(f)
-
-    # write a row to the csv file
-        writer.writerow(row)
+    print(table)
+    
     
     
     df = pd.read_csv(csv_result)
