@@ -80,6 +80,17 @@ if __name__ == "__main__":
                 table.append(col)
 
     print(table)
+    
+    
+    
+    df = pd.read_csv(csv_result)
+    df.head()
+    plt.bar(df['location'], df['temperature'])
+    plt.xlabel("Location")
+    plt.ylabel("Temperature")
+    plt.title("Testing")
+    plt.xticks(df["location"])
+    plt.show()
 
 
 
