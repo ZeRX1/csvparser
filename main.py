@@ -87,11 +87,6 @@ if __name__ == "__main__":
         )
     
     print(CSVToTable(csv_result))
-
-
-
-    print(table)
-    
     
     
     df = pd.read_csv(csv_result)
