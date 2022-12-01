@@ -102,8 +102,7 @@ if __name__ == "__main__":
     plt.xticks(df["location"])
     plt.show()
 
-
-
+    # SemiRandomSamples(client, bucket)
 
     client.close
 
