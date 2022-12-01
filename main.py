@@ -12,7 +12,7 @@ import seaborn as sns
 import pandas as pd
 from reactivex import operators as ops
 from influxdb_client import InfluxDBClient, Point, WriteOptions
-  ## gran autismo
+
 ####
 # *   Sources used:
 # *   https://github.com/influxdata/influxdb-client-python
