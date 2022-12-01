@@ -101,11 +101,11 @@ if __name__ == "__main__":
     
     df = pd.read_csv("influxdata.csv")
     df.head()
-    plt.bar(df['location'], df['temperature'])
-    plt.xlabel("Location")
+    plt.bar(df['temperature'], df['temperature'])
+    plt.xlabel("Temperature")
     plt.ylabel("Temperature")
     plt.title("Testing")
-    plt.xticks(df["location"])
+    plt.xticks(df["temperature"])
     plt.show()
 
 
