@@ -24,6 +24,8 @@ import csv
 # * Functions
 ##
 
+
+
 def CSVToTable(csv_result):
     table = []
     for csv_line in csv_result:
@@ -41,6 +43,17 @@ def writeToInflux(client, bucket, name, tag1, tag2, field1, field2):
     write_api.write(bucket=bucket, org=org, record=p)
     pass
 
+def SemiRandomSamples(client, bucket):
+    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town"]
+
+    randcity = arrcity[random.randrange(0,5)]
+    randtemp = round(random.uniform(-10.00, 45.00), 2)
+
+    for a in range(1,10,1):
+        writeToInflux(client, bucket, 'my_measurement', 'location', randcity, "temperature", randtemp)
+        pass
+    pass
+
 ##
 # * Main function
 ##
@@ -51,8 +64,8 @@ if __name__ == "__main__":
     #* Loading .env and connecting to influxDB
     ##
     load_dotenv()
-    bucket = 'testing'
-    time_range = '-24h'
+    bucket = 'testing2'
+    time_range = '-1h'
     token = os.getenv('INFLUXDB_V2_TOKEN')
     org = os.getenv('INFLUXDB_V2_ORG')
     url = os.getenv('INFLUXDB_V2_URL')
@@ -64,20 +77,6 @@ if __name__ == "__main__":
 
     query_api = client.query_api()
 
-    ##
-    #* This one is for adding values to the DB to test things
-    ##
-
-
-    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town"]
-
-    randcity = arrcity[random.randrange(0,5)]
-    randtemp = round(random.uniform(-10.00, 45.00), 2)
-
-    for a in range(1,10,1):
-        writeToInflux(client, 'testing', 'my_measurement', 'location', randcity, "temperature", randtemp)
-
-
     # CSV query and reading it line by line
     csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
         dialect=Dialect(header=False, 
@@ -88,7 +87,7 @@ if __name__ == "__main__":
         )
     
     print(CSVToTable(csv_result))
-    with open('influxdata.csv', 'w') as f:
+    with open('influxdata.csv', 'w', encoding="UTF-8") as f:
         for rows in csv_result:
             writer = csv.writer(f)
             writer.writerow(rows)
