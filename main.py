@@ -13,6 +13,7 @@ import pandas as pd
 from reactivex import operators as ops
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 import random
+import csv
 
 ####
 # *   Sources used:
@@ -87,9 +88,13 @@ if __name__ == "__main__":
         )
     
     print(CSVToTable(csv_result))
+    with open('influxdata.csv', 'w') as f:
+        for rows in csv_result:
+            writer = csv.writer(f)
+            writer.writerow(rows)
+            pass
     
-    
-    df = pd.read_csv(csv_result)
+    df = pd.read_csv("influxdata.csv")
     df.head()
     plt.bar(df['location'], df['temperature'])
     plt.xlabel("Location")
