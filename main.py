@@ -69,25 +69,19 @@ if __name__ == "__main__":
         )
     
 
-    i = 0
-    x = 0
-    table = [[1],[2],[3]]
+    table = []
+
     for csv_line in csv_result:
-        i += 1
+        col = []
         if not len(csv_line) == 0:
             for csv_entry in csv_line:
-                x += 1
                 if not len(csv_entry) == 0:
-                    print(csv_entry + str(i) + str(x))
-                    table[i][x] = csv_result[i][x]
+                    col.append(csv_entry)
+                table.append(col)
 
-        print(f"\n (mt)")
+    print(table)
 
 
-
-    # for csv_line in csv_result:
-    #     if not len(csv_line) == 0:
-    #         print(f'Temperature in {csv_line[9]} is {csv_line[6]}')
 
 
     client.close
