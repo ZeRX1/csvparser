@@ -54,6 +54,16 @@ def SemiRandomSamples(client, bucket):
         pass
     pass
 
+def QueryCSV(bucket, time_range):
+    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
+        dialect=Dialect(header=False, 
+        delimiter=",",
+        comment_prefix="#", 
+        annotations=[],
+        date_time_format="RFC3339")
+        )
+    return csv_result
+
 ##
 # * Main function
 ##
@@ -77,23 +87,19 @@ if __name__ == "__main__":
 
     query_api = client.query_api()
 
+    SemiRandomSamples(client, bucket)
     # CSV query and reading it line by line
-    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
-        dialect=Dialect(header=False, 
-        delimiter=",",
-        comment_prefix="#", 
-        annotations=[],
-        date_time_format="RFC3339")
-        )
     
-    print(CSVToTable(csv_result))
+    print(CSVToTable(QueryCSV(bucket, time_range)))
+    
+
     with open('influxdata.csv', 'w', encoding="UTF-8") as f:
-        for rows in csv_result:
+        for rows in QueryCSV(bucket, time_range):
             writer = csv.writer(f)
             writer.writerow(rows)
             pass
     
-    df = pd.read_csv(csv_result)
+    df = pd.read_csv("influxdata.csv")
     df.head()
     plt.bar(df['location'], df['temperature'])
     plt.xlabel("Location")
@@ -102,7 +108,6 @@ if __name__ == "__main__":
     plt.xticks(df["location"])
     plt.show()
 
-    # SemiRandomSamples(client, bucket)
 
     client.close
 
