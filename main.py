@@ -12,6 +12,7 @@ import seaborn as sns
 import pandas as pd
 from reactivex import operators as ops
 from influxdb_client import InfluxDBClient, Point, WriteOptions
+import random
 
 ####
 # *   Sources used:
@@ -21,6 +22,17 @@ from influxdb_client import InfluxDBClient, Point, WriteOptions
 ##
 # * Functions
 ##
+
+def CSVToTable(csv_result):
+    table = []
+    for csv_line in csv_result:
+        col = []
+        if not len(csv_line) == 0:
+            for csv_entry in csv_line:
+                if not len(csv_entry) == 0:
+                    col.append(csv_entry)
+                table.append(col)
+    return table
 
 def writeToInflux(client, bucket, name, tag1, tag2, field1, field2):
     write_api = client.write_api(write_options=SYNCHRONOUS)
@@ -55,8 +67,14 @@ if __name__ == "__main__":
     #* This one is for adding values to the DB to test things
     ##
 
-    # for a in range(1,10,1):
-    #     writeToInflux(client, 'testing', 'my_measurement', 'location', 'Old York', "temperature", 13.1)
+
+    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town"]
+
+    randcity = arrcity[random.randrange(0,5)]
+    randtemp = round(random.uniform(-10.00, 45.00), 2)
+
+    for a in range(1,10,1):
+        writeToInflux(client, 'testing', 'my_measurement', 'location', randcity, "temperature", randtemp)
 
 
     # CSV query and reading it line by line
@@ -68,16 +86,9 @@ if __name__ == "__main__":
         date_time_format="RFC3339")
         )
     
+    print(CSVToTable(csv_result))
 
-    table = []
 
-    for csv_line in csv_result:
-        col = []
-        if not len(csv_line) == 0:
-            for csv_entry in csv_line:
-                if not len(csv_entry) == 0:
-                    col.append(csv_entry)
-                table.append(col)
 
     print(table)
     
