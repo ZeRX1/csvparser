@@ -93,7 +93,7 @@ if __name__ == "__main__":
             writer.writerow(rows)
             pass
     
-    df = pd.read_csv("influxdata.csv")
+    df = pd.read_csv(csv_result)
     df.head()
     plt.bar(df['location'], df['temperature'])
     plt.xlabel("Location")
