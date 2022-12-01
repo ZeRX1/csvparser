@@ -69,7 +69,7 @@ if __name__ == "__main__":
     ##
 
 
-    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town"]
+    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town", "Warsaw", "Washington", "Los Angeles", "Boston", "Madrid", "Paris", "Barcelona", "Lisbon", "Tokyo", "Moscow", "Berlin", "London", "Manchester"]
 
     randcity = arrcity[random.randrange(0,5)]
     randtemp = round(random.uniform(-10.00, 45.00), 2)
