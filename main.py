@@ -90,8 +90,12 @@ if __name__ == "__main__":
 
 
 
-    print(table)
-    
+    with open('influxdata.csv', 'w', encoding='UTF8') as f:
+    # create the csv writer
+        writer = csv.writer(f)
+
+    # write a row to the csv file
+        writer.writerow(row)
     
     
     df = pd.read_csv(csv_result)
