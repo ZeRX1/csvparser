@@ -15,6 +15,14 @@ from influxdb_client import InfluxDBClient, Point, WriteOptions
 import random
 import csv
 
+# ! TODO:
+# ! Figure out how to use dataframes
+# ! Make the graphs work
+# ! Jupyter notebook
+# ! Try to use modules instead of having a spaghetti of functions on the top
+# ! Make the code work properly with the load cell data
+# ? Timestream
+
 ##*#
 # *   Sources used:
 # *   https://github.com/influxdata/influxdb-client-python
@@ -101,12 +109,12 @@ if __name__ == "__main__":
     # TODO: make it connect with the db automatically without specifying arguments
     # TODO: [Here](https://github.com/influxdata/influxdb-client-python#via-environment-properties)
     client = InfluxDBClient(url=url, token=token, org=org)
+    query_api = client.query_api()
 
 
     # * This function is adding sample data to the chosen database
     #SemiRandomSamples(client, bucket)
 
-    query_api = client.query_api()
 
     # Printing out an array from the csv data pulled from the DB (debugging)
     # print(CSVToTable(QueryCSV(bucket, time_range)))
@@ -121,9 +129,9 @@ if __name__ == "__main__":
     # Matplotlib graph (to be fixed ('temperature' not found or something))
     df = pd.read_csv("influxdata.csv")
     df.head()
-    plt.bar(df['lamps'], df['lamps'])
+    plt.bar(df['lamps'], df['temperature'])
     plt.xlabel("lamps")
-    plt.ylabel("lamps")
+    plt.ylabel("temperature")
     plt.title("Ratio")
     plt.xticks(df["lamps"])
     plt.show()
