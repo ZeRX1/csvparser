@@ -4,10 +4,12 @@ from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
 from reactivex import operators as ops
 from collections import OrderedDict
+import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 from tabulate import tabulate
 from csv import DictReader
-import matplotlib.pyplot as plt
+from additional import *
+from dbhandling import *
 import reactivex as rx
 import seaborn as sns
 import pandas as pd
@@ -29,69 +31,6 @@ import csv
 ##*#
 
 ##*#
-# * Functions
-##*#
-
-# * Parsing the CSV data from DB to an array
-def CSVToTable(csv_result):
-    table = []
-    for csv_line in csv_result:
-        col = []
-        if not len(csv_line) == 0:
-            for csv_entry in csv_line:
-                if not len(csv_entry) == 0:
-                    col.append(csv_entry)
-                table.append(col)
-    return table
-
-# * Write to the database (Most likely wont be needed later)
-def writeToInflux(client, bucket, name, tag1, tag2, field1, field2):
-    write_api = client.write_api(write_options=SYNCHRONOUS)
-    p = Point(name).tag(tag1, tag2).field(field1, field2)
-    write_api.write(bucket=bucket, org=org, record=p)
-    pass
-
-
-# * used for the samples
-# ? probably temporary (
-def randcity():
-    arrcity = ["New York", "Old York", "Test town", "Calm East", "Wild West", "Bruh town", "Warsaw", "Barcelona", "Madrid", "Berlin", "London", "Detroit", "Los Angeles", "London", "San Francisco"]
-
-    randcity = arrcity[random.randrange(0,14)]
-    return randcity
-def randtemp():
-    asd = random.randrange(0,50)
-    return asd
-def randadditional():
-    asd = random.randrange(0,50)
-    return asd
-# ? )
-
-# TODO: Try adding a second field to test if the graphs would work this way
-# * function for adding sample data to the database 
-# ? (probably temporary)
-def SemiRandomSamples(client, bucket):
-    for a in range(1,10,1):
-        writeToInflux(client, bucket, 'my_measurement', 'location', randcity(), "lamps", randadditional())
-        writeToInflux(client, bucket, 'my_measurement', 'location', randcity(), "temperature", randtemp())
-    print("written")
-    pass
-
-
-# * Query the chosen bucket for CSV from the data (If the time range is not specified it will default to 1h)
-def QueryCSV(bucket, time_range):
-    if not time_range:
-        time_range = "-1h"
-    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
-        dialect=Dialect(header=False, 
-        delimiter=",",
-        comment_prefix="#", 
-        annotations=[],
-        date_time_format="RFC3339")
-        )
-    return csv_result
-
-##*#
 # * Main function
 ##*#
 if __name__ == "__main__":
@@ -100,7 +39,7 @@ if __name__ == "__main__":
     #* Loading .env and connecting to influxDB
     #*#
     load_dotenv()
-    bucket = 'testing2'
+    bucket = 'downsampled'
     time_range = '-1h' # ! Remember to set this to a negative number
     token = os.getenv('INFLUXDB_V2_TOKEN')
     org = os.getenv('INFLUXDB_V2_ORG')
@@ -111,12 +50,7 @@ if __name__ == "__main__":
     client = InfluxDBClient(url=url, token=token, org=org)
     query_api = client.query_api()
 
-
-    # * This function is adding sample data to the chosen database
-    #SemiRandomSamples(client, bucket)
-
-
-    # Printing out an array from the csv data pulled from the DB (debugging)
+    # Printing out an array from the csv data pulled from the DB
     # print(CSVToTable(QueryCSV(bucket, time_range)))
     
     # Saving the csv data for proper reading by matplotlib
@@ -126,8 +60,13 @@ if __name__ == "__main__":
             writer.writerow(rows)
             pass
     
-    df = pd.DataFrame(CSVToTable(QueryCSV(bucket, time_range)), columns=['idk', 'id', 'idk', 'idk', 'idk', 'value', 'name', 'where in bucket', 'city'])
+    df = pd.DataFrame(QueryCSV(bucket, time_range), columns=['', '', 'id', 'idk2', 'idk3', 'idk4', 'value', 'name', 'where in bucket', 'city'])
 
+    print(df)
+    print(df['value'])
+
+    # Matplotlib graph (to be fixed ('temperature' not found or something))
+    # df = pd.read_csv("influxdata.csv", columns=['idk', 'id', 'idk', 'idk', 'idk', 'value', 'name', 'where in bucket', 'city'])
     df.head()
     plt.plot(df['city'], df['value'])
     plt.xlabel("lamps")
