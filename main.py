@@ -1,17 +1,17 @@
 # Imports
-from tabulate import tabulate
-import os, sys
+from influxdb_client import InfluxDBClient, Point, WriteOptions
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
-from dotenv import load_dotenv
+from reactivex import operators as ops
 from collections import OrderedDict
+from dotenv import load_dotenv
+from tabulate import tabulate
 from csv import DictReader
-import reactivex as rx
 import matplotlib.pyplot as plt
+import reactivex as rx
 import seaborn as sns
 import pandas as pd
-from reactivex import operators as ops
-from influxdb_client import InfluxDBClient, Point, WriteOptions
+import os, sys
 import random
 import csv
 
@@ -82,7 +82,7 @@ def SemiRandomSamples(client, bucket):
 def QueryCSV(bucket, time_range):
     if not time_range:
         time_range = "-1h"
-    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
+    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range} |> sort(columns: ["value"])',
         dialect=Dialect(header=False, 
         delimiter=",",
         comment_prefix="#", 
@@ -126,14 +126,18 @@ if __name__ == "__main__":
             writer.writerow(rows)
             pass
     
+    df = pd.DataFrame(CSVToTable(QueryCSV(bucket, time_range)), columns=['idk', 'id', 'idk', 'idk', 'idk', 'value', 'name', 'where in bucket', 'city'])
+
+    print(df)
+
     # Matplotlib graph (to be fixed ('temperature' not found or something))
-    df = pd.read_csv("influxdata.csv")
+    # df = pd.read_csv("influxdata.csv")
     df.head()
-    plt.bar(df['lamps'], df['temperature'])
+    plt.plot(df['city'], df['value'])
     plt.xlabel("lamps")
     plt.ylabel("temperature")
     plt.title("Ratio")
-    plt.xticks(df["lamps"])
+    plt.xticks(df['city'])
     plt.show()
     
     # close the connection to the database
