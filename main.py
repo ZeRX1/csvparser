@@ -82,7 +82,7 @@ def SemiRandomSamples(client, bucket):
 def QueryCSV(bucket, time_range):
     if not time_range:
         time_range = "-1h"
-    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range} |> sort(columns: ["value"])',
+    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
         dialect=Dialect(header=False, 
         delimiter=",",
         comment_prefix="#", 
@@ -128,10 +128,6 @@ if __name__ == "__main__":
     
     df = pd.DataFrame(CSVToTable(QueryCSV(bucket, time_range)), columns=['idk', 'id', 'idk', 'idk', 'idk', 'value', 'name', 'where in bucket', 'city'])
 
-    print(df)
-
-    # Matplotlib graph (to be fixed ('temperature' not found or something))
-    # df = pd.read_csv("influxdata.csv")
     df.head()
     plt.plot(df['city'], df['value'])
     plt.xlabel("lamps")
