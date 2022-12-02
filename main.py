@@ -39,40 +39,34 @@ if __name__ == "__main__":
     #* Loading .env and connecting to influxDB
     #*#
     load_dotenv()
+    #! Values are set here \/
     bucket = 'downsampled'
-    time_range = '-1h' # ! Remember to set this to a negative number
+    time_range = '-90d' # ! Remember to set this to a negative number
     token = os.getenv('INFLUXDB_V2_TOKEN')
     org = os.getenv('INFLUXDB_V2_ORG')
     url = os.getenv('INFLUXDB_V2_URL')
     
     # TODO: make it connect with the db automatically without specifying arguments
     # TODO: [Here](https://github.com/influxdata/influxdb-client-python#via-environment-properties)
-    client = InfluxDBClient(url=url, token=token, org=org)
+    client = InfluxDBClient.from_env_properties()
     query_api = client.query_api()
 
     # Printing out an array from the csv data pulled from the DB
     # print(CSVToTable(QueryCSV(bucket, time_range)))
     
-    # Saving the csv data for proper reading by matplotlib
-    with open('influxdata.csv', 'w', encoding="UTF-8") as f:
-        for rows in QueryCSV(bucket, time_range):
-            writer = csv.writer(f)
-            writer.writerow(rows)
-            pass
-    
-    df = pd.DataFrame(QueryCSV(bucket, time_range), columns=['', '', 'id', 'idk2', 'idk3', 'idk4', 'value', 'name', 'where in bucket', 'city'])
+    df = pd.DataFrame(QueryCSV(bucket, time_range), columns=['','','','TimeStamp1','TimeStamp2','Timestamp3','Force','load_value','measurename','','bool','numer'])
 
     print(df)
-    print(df['value'])
+    print(df['Force'])
 
     # Matplotlib graph (to be fixed ('temperature' not found or something))
     # df = pd.read_csv("influxdata.csv", columns=['idk', 'id', 'idk', 'idk', 'idk', 'value', 'name', 'where in bucket', 'city'])
     df.head()
-    plt.plot(df['city'], df['value'])
-    plt.xlabel("lamps")
-    plt.ylabel("temperature")
+    plt.plot(df['TimeStamp3'], df['Force'])
+    plt.xlabel("Time")
+    plt.ylabel("Force")
     plt.title("Ratio")
-    plt.xticks(df['city'])
+    plt.xticks(df['TimeStamp3'])
     plt.show()
     
     # close the connection to the database
