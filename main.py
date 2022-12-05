@@ -19,6 +19,8 @@ try:
     import csv
 except ImportError as err:
     print("Couldn't load modules " + err)
+except Exception as err:
+    print(f"Unexpected {err=}, {type(err)=}")
     raise
 # ! TODO:
 # ! Figure out how to use dataframes
@@ -45,7 +47,8 @@ if __name__ == "__main__":
         load_dotenv()
         #! Values are set here \/
         bucket = 'downsampled'
-        time_range = '-90d' # ! Remember to set this to a negative number
+        time_range = '-30d' # ! Remember to set this to a negative number
+        stop_range = '-1d'
         token = os.getenv('INFLUXDB_V2_TOKEN')
         org = os.getenv('INFLUXDB_V2_ORG')
         url = os.getenv('INFLUXDB_V2_URL')
@@ -58,30 +61,45 @@ if __name__ == "__main__":
         print(err)
     except KeyError as err:
         print(err)
+    except TimeoutError as err:
+        print("Is the IP correct? (.env)" + err)
+    except Exception as err:
+        print(f"Unexpected {err=}, {type(err)=}")
         raise
 
 
-    # * Buildinf a dataframe
+    # * Buildinf a dataframe and making a graph
+    # * SELECT SUM(count) FROM (SELECT *,count::INTEGER FROM MyMeasurement GROUP BY count FILL(1))
+    # * ^ query used to count rows
     try:    
-        df = pd.DataFrame(QueryCSV(bucket, time_range), 
-        columns=['','','','TimeStamp1','TimeStamp2','Timestamp3','Force','load_value','measurename','','bool','numer'])
+        if not time_range:
+            time_range = '-1h'
+            stop_range = 'now()'
+        test = query_api.query_csv('SELECT SUM(load_value) FROM (SELECT *,count::INTEGER FROM V1P GROUP BY count FILL(1))')
+        print(test)
+        df = pd.DataFrame(QueryCSV(bucket, time_range, stop_range), 
+        columns=['','','','Timestamp1','Timestamp2','Timestamp3','Force','load_value','measurename','','bool','numer'])
+        df.astype({'Force': 'float64'}).dtypes
+        df.astype({'Timestamp3': 'datetime64'}).dtypes
 
         print(df)
-        print(df['Force'])
+        print(df['Timestamp3'])
 
-        # Matplotlib graph (to be fixed ('temperature' not found or something))
-        # df = pd.read_csv("influxdata.csv", columns=['idk', 'id', 'idk', 'idk', 'idk', 'value', 'name', 'where in bucket', 'city'])
-        df.head()
         plt.plot(df['Force'], df['TimeStamp3'])
         plt.xlabel("Time")
         plt.ylabel("Force")
         plt.title("Ratio")
         plt.xticks(df['TimeStamp3'])
         plt.show()
-    except KeyError as err:
-        print(err)
+
     except ValueError as err:
         print(err)
+    except KeyError as err:
+        print(err)
+    except TimeoutError as err:
+        print("Is the IP correct? (.env)" + err)
+    except Exception as err:
+        print(f"Unexpected {err=}, {type(err)=}")
         raise
         
     # close the connection to the database

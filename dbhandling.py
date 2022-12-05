@@ -22,11 +22,16 @@ token = os.getenv('INFLUXDB_V2_TOKEN')
 org = os.getenv('INFLUXDB_V2_ORG')
 url = os.getenv('INFLUXDB_V2_URL')
 
+# * get the count of every row (Need to eliminate None values from queries as they break the dtype)
+# * from(bucket: "downsampled")|> range(start: -30d)|> group(columns: ["host", "_field"], mode:"by")|> filter(fn: (r) => r._measurement == "V1P" or r._measurement == "V1S" or r._measurement == "Headstay") |> count()
+
+
 # * Query the chosen bucket for CSV from the data (If the time range is not specified it will default to 1h)
-def QueryCSV(bucket, time_range):
+def QueryCSV(bucket, time_range, stop_range):
     if not time_range:
-        time_range = "-1h"
-    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range})',
+        time_range = '-1h'
+        stop_range = 'now()'
+    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range}, stop: {stop_range})',
         dialect=Dialect(header=False, 
         delimiter=",",
         comment_prefix="#", 
