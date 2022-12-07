@@ -3,3 +3,5 @@
 /influxdata.csv
 /__pycache__/additional.cpython-311.pyc
 /__pycache__/dbhandling.cpython-311.pyc
+main.py
+.gitignore

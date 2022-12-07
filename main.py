@@ -63,6 +63,8 @@ if __name__ == "__main__":
         print(err)
     except TimeoutError as err:
         print("Is the IP correct? (.env)" + err)
+    except AttributeError as err:
+        print(err)
     except Exception as err:
         print(f"Unexpected {err=}, {type(err)=}")
         raise
@@ -91,7 +93,7 @@ if __name__ == "__main__":
         V1Spcount = parseCount(V1Scount)
         Headstaypcount = parseCount(Headstaycount)
 
-
+        print(V1Ppcount)
 
         df = pd.DataFrame(QueryCSV(bucket, time_range, stop_range), 
         columns=['empty','what','series_number','timestamp1','timestamp2','timestamp3','force','load_value','measurement','health_status','bool','serial_number'])
@@ -110,6 +112,8 @@ if __name__ == "__main__":
         print(err)
     except TimeoutError as err:
         print("Is the IP correct? (.env)" + err)
+    except AttributeError as err:
+        print(err)
     except Exception as err:
         print(f"Unexpected {err=}, {type(err)=}")
         raise
