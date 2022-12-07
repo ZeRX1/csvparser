@@ -22,6 +22,7 @@ token = os.getenv('INFLUXDB_V2_TOKEN')
 org = os.getenv('INFLUXDB_V2_ORG')
 url = os.getenv('INFLUXDB_V2_URL')
 
+
 # * Write to the database (Most likely wont be needed later)
 def writeToInflux(client, bucket, name, tag1, tag2, field1, field2):
     write_api = client.write_api(write_options=SYNCHRONOUS)

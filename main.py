@@ -85,19 +85,12 @@ if __name__ == "__main__":
         if not time_range:
             time_range = '-1h'
             stop_range = 'now()'
-        V1Pcount = query_api.query_csv(f'from(bucket: "downsampled") |> range(start: {time_range}, stop: {stop_range}) |> group(columns: ["host", "_field"], mode:"by") |> filter(fn: (r) => r._measurement == "V1P") |> count()')
-        V1Scount = query_api.query_csv(f'from(bucket: "downsampled") |> range(start: {time_range}, stop: {stop_range}) |> group(columns: ["host", "_field"], mode:"by") |> filter(fn: (r) => r._measurement == "V1P") |> count()')
-        Headstaycount = query_api.query_csv(f'from(bucket: "downsampled") |> range(start: {time_range}, stop: {stop_range}) |> group(columns: ["host", "_field"], mode:"by") |> filter(fn: (r) => r._measurement == "V1P") |> count()')
-
-        V1Ppcount = parseCount(V1Pcount)
-        V1Spcount = parseCount(V1Scount)
-        Headstaypcount = parseCount(Headstaycount)
-
-        print(V1Ppcount)
+        saveCSVToFile(QueryCSV(bucket, time_range, stop_range), time_range, stop_range)
 
         df = pd.DataFrame(QueryCSV(bucket, time_range, stop_range), 
-        columns=['empty','what','series_number','timestamp1','timestamp2','timestamp3','force','load_value','measurement','health_status','bool','serial_number'])
+        columns=['empty','what','series_number','timestamp1','timestamp2','timestamp3','force','load_value','measurement','health_status','bool','serial_no'])
         print(df)
+
 
         plt.plot(df['Force'], df['TimeStamp3'])
         plt.xlabel("Time")
