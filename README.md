@@ -15,3 +15,5 @@ Current priority:
 - [ ] - Make a query that will help with NOT accounting the last value as it's always empty (even when testing and putting in sample data last value was 'None')
 
 - [ ] - Jupyter Notebook integration (Basic point graphs)
+
+- [ ] - Function to get the data from database with choosing exact data, if not then print out the whole

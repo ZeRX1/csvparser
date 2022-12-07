@@ -70,20 +70,30 @@ if __name__ == "__main__":
 
     # * Buildinf a dataframe and making a graph
     # * SELECT SUM(count) FROM (SELECT *,count::INTEGER FROM MyMeasurement GROUP BY count FILL(1))
-    # * ^ query used to count rows
+    # * ^ query used to count rows // no its not 🥴
+
+    # from(bucket: "downsampled")
+    # |> range(start: -30d)
+    # |> group(columns: ["host", "_field"], mode:"by")
+    # |> filter(fn: (r) => r._measurement == "V1P" or r._measurement == "V1S" or r._measurement == "Headstay")
+    # |> count()
+    # this is used to count the rows (unfortunately slow but works fine)
+    # first check one and try to parse everything except last entry then do the same for the rest and build it into a dataframe
     try:    
         if not time_range:
             time_range = '-1h'
             stop_range = 'now()'
-        test = query_api.query_csv('SELECT SUM(load_value) FROM (SELECT *,count::INTEGER FROM V1P GROUP BY count FILL(1))')
-        print(test)
+        V1Pcount = query_api.query_csv(f'from(bucket: "downsampled") |> range(start: {time_range}, stop: {stop_range}) |> group(columns: ["host", "_field"], mode:"by") |> filter(fn: (r) => r._measurement == "V1P") |> count()')
+        V1Scount = query_api.query_csv(f'from(bucket: "downsampled") |> range(start: {time_range}, stop: {stop_range}) |> group(columns: ["host", "_field"], mode:"by") |> filter(fn: (r) => r._measurement == "V1P") |> count()')
+        Headstaycount = query_api.query_csv(f'from(bucket: "downsampled") |> range(start: {time_range}, stop: {stop_range}) |> group(columns: ["host", "_field"], mode:"by") |> filter(fn: (r) => r._measurement == "V1P") |> count()')
+
+        print(V1Pcount[0])
         df = pd.DataFrame(QueryCSV(bucket, time_range, stop_range), 
-        columns=['','','','Timestamp1','Timestamp2','Timestamp3','Force','load_value','measurename','','bool','numer'])
-        df.astype({'Force': 'float64'}).dtypes
-        df.astype({'Timestamp3': 'datetime64'}).dtypes
+        columns=['batch_nr','','','Timestamp1','Timestamp2','Timestamp3','Force','load_value','measurename','','bool','serial_number'])
+        pd.to_numeric(df.Force)
 
         print(df)
-        print(df['Timestamp3'])
+        print(df['Force'])
 
         plt.plot(df['Force'], df['TimeStamp3'])
         plt.xlabel("Time")
