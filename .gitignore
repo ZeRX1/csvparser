@@ -1,3 +1,5 @@
-.env
-influxdata.csv
-__pycache__/*
+/__pycache__
+/.env
+/influxdata.csv
+/__pycache__/additional.cpython-311.pyc
+/__pycache__/dbhandling.cpython-311.pyc

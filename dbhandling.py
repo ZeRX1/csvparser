@@ -31,7 +31,7 @@ def QueryCSV(bucket, time_range, stop_range):
     if not time_range:
         time_range = '-1h'
         stop_range = 'now()'
-    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range}, stop: {stop_range})',
+    csv_result = query_api.query_csv(f'from(bucket:"{bucket}") |> range(start: {time_range}, stop: {stop_range}) |> fill(usePrevious:true)',
         dialect=Dialect(header=False, 
         delimiter=",",
         comment_prefix="#", 
@@ -40,6 +40,10 @@ def QueryCSV(bucket, time_range, stop_range):
         )
     return csv_result
     
+def parseCount(value):
+    asd = pd.DataFrame(value, columns=['a','as','asd','asdf','asdfg','asdfgh','asdfghj','here'])
+    count = asd['here'].values[4]
+    return count
 def saveCSVToFile(bucket, time_range):
     with open('influxdata.csv', 'w', encoding="UTF-8") as f:
         for rows in QueryCSV(bucket, time_range):
