@@ -59,11 +59,21 @@ if __name__ == "__main__":
         V1Sdf = dataToDF(query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "V1S") |> filter(fn: (r) => r._field == "load_value")'))
         Headstaydf = dataToDF(query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Headstay") |> filter(fn: (r) => r._field == "load_value")'))
 
+
+
         # Joining the Data Frames
-        print(awsdf)
-        plt.scatter(awsdf._timestamp, awsdf.Wind_Data_aws)
-        plt.grid()
-        plt.show()
+        mergedRes = pd.merge(awsdf, awddf, on ='_timestamp', how ="outer")
+        mergedRes = pd.merge(mergedRes, V1Pdf, on ='_timestamp', how ="outer")
+        mergedRes = pd.merge(mergedRes, V1Sdf, on ='_timestamp', how ="outer")
+        mergedRes = pd.merge(mergedRes, Headstaydf, on ='_timestamp', how ="outer")
+        mergedRes.fillna(0, inplace=True)
+        # wanted to debug 👀
+        # exportDFToFile(mergedRes, "merged")
+
+        # plotting the graph
+        # plt.scatter(awsdf._timestamp, awsdf._Wind_Data_aws)
+        # plt.grid()
+        # plt.show()
 
 
 

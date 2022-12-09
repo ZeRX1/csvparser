@@ -9,7 +9,7 @@ def dataToDF(data):
             oneresulttable = []
             oneresulttable.append(line.get_time())
             oneresulttable.append(line.get_value())
-            value_name = line.get_measurement() + "_" + line.get_field()
+            value_name = "_" + line.get_measurement() + "_" + line.get_field()
             tables.append(oneresulttable)
     
     df = finishDF(tables, value_name)
