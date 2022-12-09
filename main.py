@@ -59,12 +59,13 @@ if __name__ == "__main__":
 
         # Table with the data from the DB
 
-        dataframe_downsampled = pd.DataFrame(dfdatadownsampled, columns=["_measurement", "_timestamp", "_field", "_value"])
-        dataframe_nmea2k = pd.DataFrame(dfdatanmea2k, columns=["_measurement", "_timestamp", "_field", "_value"])
+        # dataframe_downsampled = pd.DataFrame(dfdatadownsampled, columns=["_measurement", "_timestamp", "_field", "_value"])
+        # dataframe_nmea2k = pd.DataFrame(dfdatanmea2k, columns=["_measurement", "_timestamp", "_field", "_value"])
 
-        print(dataframe_downsampled)
-        
-        exportCSVToFile(dataframe_downsampled, 'downsampled')
+        nmea2kdf = dataToDataFrame(dfdatanmea2k)
+        downsampleddf = dataToDataFrame(dfdatadownsampled)
+
+
 
     except ValueError as err:
         print(err)
