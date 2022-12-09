@@ -1,18 +1,20 @@
 Current priority:
 
-- [ ] - Parsing the data in Python (!)
+- [X] - Parsing the data in Python (!)
 
-- [ ] !- Using numpy, pandas to build data frames (!)
+- [X] !- Using numpy, pandas to build data frames (!)
     - [Tutorial for this](https://www.geeksforgeeks.org/create-a-dataframe-from-a-numpy-array-and-specify-the-index-column-and-column-headers/)
+    - [ ] Make seperate dataframes for each table
     
 - [ ] !- Using Matplotlib or Seaborn to plot the data and the frequency
     - [Tutorial for this](https://medium.com/ml-with-arpit-pathak/data-visualization-using-matplotlib-and-seaborn-in-python-62fd64a57936)
 
 - [ ] ?- The plotted data should be load cell data, as well as wind parameters such as aws.
         - nmea2k aws/awd
+        - downsampled
 
-- [ ] - Make a proper table that will hold everything that's pulled from the database
-        - [ ] - Pull the data directly and put it into a table from which we make a dataframe
+- [x] - Make a proper table that will hold everything that's pulled from the database
+        - [x] - Pull the data directly and put it into a table from which we make a dataframe
 
 - [ ] - Jupyter Notebook integration (Basic point graphs)
 
