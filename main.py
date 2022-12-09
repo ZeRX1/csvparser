@@ -1,20 +1,15 @@
 try:
-    from influxdb_client import InfluxDBClient, Point, WriteOptions
-    from influxdb_client import InfluxDBClient, Point, Dialect
+    from influxdb_client import InfluxDBClient, Point, WriteOptions, Dialect
+    # not needed? \/
     from influxdb_client.client.write_api import SYNCHRONOUS
-    from reactivex import operators as ops
-    from collections import OrderedDict
-    import matplotlib.pyplot as plt
     from dotenv import load_dotenv
-    from functions import *
-    from tabulate import tabulate
-    from csv import DictReader
-    import reactivex as rx
+    import matplotlib.pyplot as plt
     import seaborn as sns
     import pandas as pd
     import os, sys
-    import random
+    from csv import DictReader
     import csv
+    from functions import *
 except ImportError as err:
     print("Couldn't load modules " + err)
 except Exception as err:
@@ -56,11 +51,6 @@ if __name__ == "__main__":
 
         dfdatanmea2k = query_api.query(f'from(bucket:"{bucket_nmea2k}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Wind_Data") |> filter(fn: (r) => r._field == "awd" or r._field == "aws")')
         dfdatadownsampled = query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time})')
-
-        # Table with the data from the DB
-
-        # dataframe_downsampled = pd.DataFrame(dfdatadownsampled, columns=["_measurement", "_timestamp", "_field", "_value"])
-        # dataframe_nmea2k = pd.DataFrame(dfdatanmea2k, columns=["_measurement", "_timestamp", "_field", "_value"])
 
         nmea2kdf = dataToDataFrame(dfdatanmea2k)
         downsampleddf = dataToDataFrame(dfdatadownsampled)
