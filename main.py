@@ -47,11 +47,23 @@ if __name__ == "__main__":
         #   Query the DB for data
         ##
 
-        dfdatanmea2k = query_api.query(f'from(bucket:"{bucket_nmea2k}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Wind_Data") |> filter(fn: (r) => r._field == "awd" or r._field == "aws")')
+        dfdatanmea2k = query_api.query(f'from(bucket:"{bucket_nmea2k}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Wind_Data") |> filter(fn: (r) => r._field == "aws")')
         dfdatadownsampled = query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time})')
-
         nmea2kdf = dataToDF(dfdatanmea2k)
         downsampleddf = dataToDF(dfdatadownsampled)
+
+        # All tables to Data Frames
+        awsdf = dataToDF(query_api.query(f'from(bucket:"{bucket_nmea2k}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Wind_Data") |> filter(fn: (r) => r._field == "aws")'))
+        awddf = dataToDF(query_api.query(f'from(bucket:"{bucket_nmea2k}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Wind_Data") |> filter(fn: (r) => r._field == "aws")'))
+        V1Pdf = dataToDF(query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "V1P") |> filter(fn: (r) => r._field == "load_value")'))
+        V1Sdf = dataToDF(query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "V1S") |> filter(fn: (r) => r._field == "load_value")'))
+        Headstaydf = dataToDF(query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Headstay") |> filter(fn: (r) => r._field == "load_value")'))
+
+        # Joining the Data Frames
+        print(awsdf)
+        plt.scatter(awsdf._timestamp, awsdf.Wind_Data_aws)
+        plt.grid()
+        plt.show()
 
 
 
