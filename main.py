@@ -47,8 +47,6 @@ if __name__ == "__main__":
         #   Query the DB for data
         ##
 
-        query_api = client.query_api()
-
         dfdatanmea2k = query_api.query(f'from(bucket:"{bucket_nmea2k}") |> range(start: {start_time}, stop: {stop_time}) |> filter(fn: (r) => r._measurement == "Wind_Data") |> filter(fn: (r) => r._field == "awd" or r._field == "aws")')
         dfdatadownsampled = query_api.query(f'from(bucket:"{bucket_downsampled}") |> range(start: {start_time}, stop: {stop_time})')
 
