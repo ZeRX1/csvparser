@@ -1,8 +1,9 @@
 import csv
 import pandas as pd
 
-
+# Functions
 def dataToDF(data):
+    # Create a DataFrame
     tables = []
     for table in data:
         for line in table.records:
@@ -12,11 +13,6 @@ def dataToDF(data):
             tables.append(oneresulttable)
             value_name = "_" + line.get_measurement() + "_" + line.get_field()
     
-    df = finishDF(tables,value_name)
-    return df
-
-
-def finishDF(tables, value_name):
     df = pd.DataFrame(tables, columns=["_timestamp", value_name])
     return df
 

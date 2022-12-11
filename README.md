@@ -9,6 +9,8 @@
     - [Tutorial for this](https://www.geeksforgeeks.org/create-a-dataframe-from-a-numpy-array-and-specify-the-index-column-and-column-headers/)
     - [x] - Make seperate dataframes for each table
     - [x] - Join the dataframes
+    - [ ] - Make a function to join data frames without hard-coded things
+    - [ ] - Make a function to give an array of column names for plotting
     
 - [x] !- Using Matplotlib or Seaborn to plot the data and the frequency
     - [Tutorial for this](https://medium.com/ml-with-arpit-pathak/data-visualization-using-matplotlib-and-seaborn-in-python-62fd64a57936)
