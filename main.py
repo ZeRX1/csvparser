@@ -66,7 +66,7 @@ if __name__ == "__main__":
         mergedRes = pd.merge(mergedRes, V1Pdf, on ='_timestamp', how ="outer")
         mergedRes = pd.merge(mergedRes, V1Sdf, on ='_timestamp', how ="outer")
         mergedRes = pd.merge(mergedRes, Headstaydf, on ='_timestamp', how ="outer")
-        mergedRes.fillna(0, inplace=True)
+        # mergedRes.fillna(0, inplace=True)
         # wanted to debug 👀
         # exportDFToFile(mergedRes, "merged")
         print(mergedRes)
@@ -76,6 +76,11 @@ if __name__ == "__main__":
         plt.plot(mergedRes._timestamp, mergedRes._Headstay_load_value)
         plt.plot(mergedRes._timestamp, mergedRes._V1S_load_value)
         plt.plot(mergedRes._timestamp, mergedRes._V1P_load_value)
+        legend = ['Average wind speed', 'Load Value Headstay', 'Load Value V1S', 'Load Value V1P']
+        plt.legend(legend)
+        plt.xlabel('Date')
+        plt.ylabel('Values')
+        plt.title('Load Cell data')
         plt.grid()
         plt.show()
 
