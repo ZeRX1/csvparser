@@ -66,9 +66,6 @@ if __name__ == "__main__":
         mergedRes = pd.merge(mergedRes, V1Pdf, on ='_timestamp', how ="outer")
         mergedRes = pd.merge(mergedRes, V1Sdf, on ='_timestamp', how ="outer")
         mergedRes = pd.merge(mergedRes, Headstaydf, on ='_timestamp', how ="outer")
-        # mergedRes.fillna(0, inplace=True)
-        # wanted to debug 👀
-        # exportDFToFile(mergedRes, "merged")
         print(mergedRes)
 
         # plotting the graph
@@ -86,16 +83,10 @@ if __name__ == "__main__":
 
 
 
-    except ValueError as err:
-        print(err)
-    except KeyError as err:
+    except (ValueError, KeyError, AttributeError, IndexError) as err:
         print(err)
     except TimeoutError as err:
         print("Is the IP correct? (.env)" + err)
-    except AttributeError as err:
-        print(err)
-    except IndexError as err:
-        print(err)
     except Exception as err:
         print(f"Unexpected {err=}, {type(err)=}")
         raise

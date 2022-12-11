@@ -29,6 +29,7 @@
 
 - [ ] - Function to get the data from database with choosing exact data, if not then print out the whole
     - [ ] - Pull choosen data from db directly (If args are present use them instead of .env)
+    - [ ] - Make queries to db as a function
 
 - ParseDataFrames:
 
