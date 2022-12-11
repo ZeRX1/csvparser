@@ -1,4 +1,6 @@
-Current priority:
+#Current priority:
+
+- [ ] - Use it as script with arguments (!)
 
 - [X] - Parsing the data in Python (!)
 
@@ -9,6 +11,9 @@ Current priority:
     
 - [x] !- Using Matplotlib or Seaborn to plot the data and the frequency
     - [Tutorial for this](https://medium.com/ml-with-arpit-pathak/data-visualization-using-matplotlib-and-seaborn-in-python-62fd64a57936)
+    - [x] - Plot merged data frame
+    - [x] - Add labels and title
+    - [ ] - Make it universal (!)
 
 - [x] ?- The plotted data should be load cell data, as well as wind parameters such as aws.
         - nmea2k aws/awd
@@ -17,9 +22,10 @@ Current priority:
 - [x] - Make a proper table that will hold everything that's pulled from the database
         - [x] - Pull the data directly and put it into a table from which we make a dataframe
 
-- [ ] - Jupyter Notebook integration (Basic point graphs)
+- [ ] - Jupyter Notebook integration (Basic point graphs) (!)
 
 - [ ] - Function to get the data from database with choosing exact data, if not then print out the whole
+    - [ ] - Pull choosen data from db directly (If args are present use them instead of .env)
 
 - ParseDataFrames:
 
