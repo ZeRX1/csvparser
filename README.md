@@ -5,7 +5,7 @@ Current priority:
 - [X] !- Using numpy, pandas to build data frames (!)
     - [Tutorial for this](https://www.geeksforgeeks.org/create-a-dataframe-from-a-numpy-array-and-specify-the-index-column-and-column-headers/)
     - [x] - Make seperate dataframes for each table
-    - [ ] - Join the dataframes
+    - [x] - Join the dataframes
     
 - [x] !- Using Matplotlib or Seaborn to plot the data and the frequency
     - [Tutorial for this](https://medium.com/ml-with-arpit-pathak/data-visualization-using-matplotlib-and-seaborn-in-python-62fd64a57936)
