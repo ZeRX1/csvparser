@@ -1,6 +1,7 @@
 #Current priority:
 
 - [ ] - Use it as script with arguments (!)
+    - [ ] - Make help
 
 - [X] - Parsing the data in Python (!)
 
