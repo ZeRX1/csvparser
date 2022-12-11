@@ -69,11 +69,15 @@ if __name__ == "__main__":
         mergedRes.fillna(0, inplace=True)
         # wanted to debug 👀
         # exportDFToFile(mergedRes, "merged")
+        print(mergedRes)
 
         # plotting the graph
-        # plt.scatter(awsdf._timestamp, awsdf._Wind_Data_aws)
-        # plt.grid()
-        # plt.show()
+        plt.plot(mergedRes._timestamp, mergedRes._Wind_Data_aws)
+        plt.plot(mergedRes._timestamp, mergedRes._Headstay_load_value)
+        plt.plot(mergedRes._timestamp, mergedRes._V1S_load_value)
+        plt.plot(mergedRes._timestamp, mergedRes._V1P_load_value)
+        plt.grid()
+        plt.show()
 
 
 
