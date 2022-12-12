@@ -32,10 +32,10 @@ def main():
     url = os.getenv('INFLUXDB_V2_URL')
     # make the variables below be set by arguments instead of .env
     # args
-    bucket_downsampled = os.getenv('bucket_downsampled')
-    bucket_nmea2k = os.getenv('bucket_nmea2k')
-    start_time = os.getenv('start_time')
-    stop_time = os.getenv('stop_time')
+    # bucket_downsampled = os.getenv('bucket_downsampled') # done with args
+    # bucket_nmea2k = os.getenv('bucket_nmea2k') # done with args
+    # start_time = os.getenv('start_time') # done with args
+    # stop_time = os.getenv('stop_time') # done with args
     # Connect to DB
     client = InfluxDBClient.from_env_properties()
     query_api = client.query_api()
@@ -70,7 +70,6 @@ def main():
     plt.grid()
     plt.show()
 
-
     return 
 
 
@@ -78,9 +77,7 @@ def readArgs(argv):
     try:
         opts, args = getopt.getopt(argv, "b:m:f:p:s:o")
     except getopt.GetoptError as err:
-
         print(err) 
-        time.sleep(10)
         sys.exit(2)
 
     #add this to an array/dictionary and send further
@@ -102,7 +99,8 @@ def readArgs(argv):
             array.append(setup)
         print(array)
     time.sleep(10)
-    return array
+
+    return #array
 
 ##*#
 # * Main function
