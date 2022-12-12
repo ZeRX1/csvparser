@@ -2,6 +2,7 @@
 
 - [ ] - Use it as script with arguments (!)
     - [ ] - Make help
+    - [ ] - First time setup thing, if the script doesn't detect a config file (.env; config.ini) it'll create one and ask for data needed for the script to run (DB ip, token, org, what buckets etc.) and save them
 
 - [X] - Parsing the data in Python (!)
 
@@ -9,7 +10,7 @@
     - [Tutorial for this](https://www.geeksforgeeks.org/create-a-dataframe-from-a-numpy-array-and-specify-the-index-column-and-column-headers/)
     - [x] - Make seperate dataframes for each table
     - [x] - Join the dataframes
-    - [ ] - Make a function to join data frames without hard-coded things
+    - [x] - Make a function to join data frames without hard-coded things
     - [ ] - Make a function to give an array of column names for plotting
     
 - [x] !- Using Matplotlib or Seaborn to plot the data and the frequency
@@ -25,11 +26,13 @@
 - [x] - Make a proper table that will hold everything that's pulled from the database
         - [x] - Pull the data directly and put it into a table from which we make a dataframe
 
-- [ ] - Jupyter Notebook integration (Basic point graphs) (!)
+- [ ] - Jupyter Notebook integration (!)
 
 - [ ] - Function to get the data from database with choosing exact data, if not then print out the whole
     - [ ] - Pull choosen data from db directly (If args are present use them instead of .env)
     - [ ] - Make queries to db as a function
+
+
 
 - ParseDataFrames:
 
