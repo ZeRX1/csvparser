@@ -9,6 +9,8 @@ try:
     from csv import DictReader
     from functions import *
 
+    import time
+
 except ImportError as err:
     print("Couldn't load modules " + err)
 except Exception as err:
@@ -44,16 +46,16 @@ def main():
     ##
 
     # All tables to Data Frames
-    awsdf = queryIDBToDF("nmea2k", "-18d", "-16d", "Wind_Data", "aws")
-    awddf = queryIDBToDF("nmea2k", "-18d", "-16d", "Wind_Data", "awd")
-    V1Pdf = queryIDBToDF("downsampled", "-18d", "-16d", "V1P", "load_value")
-    V1Sdf = queryIDBToDF("downsampled", "-18d", "-16d", "V1S", "load_value")
-    Headstaydf = queryIDBToDF("downsampled", "-18d", "-16d", "Headstay", "load_value")
+    awsdf = queryIDBToDF(bucket_nmea2k, start_time, stop_time, "Wind_Data", "aws")
+    awddf = queryIDBToDF(bucket_nmea2k, start_time, stop_time, "Wind_Data", "awd")
+    V1Pdf = queryIDBToDF(bucket_downsampled, start_time, stop_time, "V1P", "load_value")
+    V1Sdf = queryIDBToDF(bucket_downsampled, start_time, stop_time, "V1S", "load_value")
+    Headstaydf = queryIDBToDF(bucket_downsampled, start_time, stop_time, "Headstay", "load_value")
 
     # Make an array of the dataframes and merge them
     dfarray = [awsdf, awddf, V1Pdf, V1Sdf, Headstaydf]
     mergedRes = mergeDF(dfarray)
-    print(mergedRes)
+    print(mergedRes) # debug
 
     # plotting the graph
     plt.plot(mergedRes._timestamp, mergedRes._Wind_Data_aws)
@@ -67,32 +69,39 @@ def main():
     plt.title('Load Cell data')
     plt.grid()
     plt.show()
-    return 0
+
+
+    return 
 
 
 def readArgs(argv):
     try:
-        opts, args = getopt.getopt(argv, "b:m:f:p:s:o:")
+        opts, args = getopt.getopt(argv, "b:m:f:p:s:o")
     except getopt.GetoptError as err:
+
         print(err) 
+        time.sleep(10)
         sys.exit(2)
 
     #add this to an array/dictionary and send further
     array = []
     for opt, arg in opts:
+        print(opt, arg)
         if opt in ('-b'):
-            bucket = arg
+            array.append(arg)
         elif opt in ('-m'):
-            measurement = arg
+            array.append(arg)
         elif opt in ('-f'):
-            field = arg
+            array.append(arg)
         elif opt in ('-p'):
-            stop_time = arg
+            array.append(arg)
         elif opt in ('-s'):
-            start_time = arg
+            array.append(arg)
         elif opt in('-o'):
-            setup = arg
-        
+            setup = True
+            array.append(setup)
+        print(array)
+    time.sleep(10)
     return array
 
 ##*#
@@ -101,7 +110,7 @@ def readArgs(argv):
 if __name__ == "__main__":
     try:
         # read arguments
-        #readArgs(sys.argv[1:])
+        readArgs(sys.argv[1:])
         main()
     except (ValueError, KeyError, AttributeError, IndexError) as err:
         print(err)
