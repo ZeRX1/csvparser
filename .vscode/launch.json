@@ -37,7 +37,7 @@
             "name": "Python: bieżący plik",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": ".\\main.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
