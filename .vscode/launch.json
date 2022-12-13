@@ -5,10 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: bieżący plik",
+            "name": "comfig",
+            "type": "python",
+            "request": "launch",
+            "program": ".\\main.py",
+            "console": "integratedTerminal",
+            "args": ["-c"],
+            "justMyCode": true
+        },
+        {
+            "name": "pargs",
             "type": "python",
             "request": "launch",
             "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "-b",
+                "nmea2k",
+                "-m",
+                "Wind_Data",
+                "-f",
+                "aws",
+                "-p",
+                "15d",
+                "-s",
+                "-20d"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "Python: bieżący plik",
+            "type": "python",
+            "request": "launch",
+            "program": "python ${file} -b nmea2k -m Wind_Data -f aws -p -15d -s -20d",
             "console": "integratedTerminal",
             "justMyCode": true
         }

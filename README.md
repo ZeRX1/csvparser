@@ -1,9 +1,9 @@
 #Current priority:
 
-- [ ] - Use it as script with arguments (!)
-    - [ ] - Make help
-    - [ ] - First time setup thing, if the script doesn't detect a config file (.env; config.ini) it'll create one and ask for data needed for the script to run (DB ip, token, org, what buckets etc.) and save them
-    - [ ] - Make an option of config that will save it in a config.json file where you'd specify what data do you want. If there's a need to only read one thing then use the arguments
+- [x] - Use it as script with arguments (!)
+    - [x] - Make help
+    - [ ] - (test) First time setup thing, if the script doesn't detect a config file (.env; config.ini) it'll create one and ask for data needed for the script to run (DB ip, token, org, what buckets etc.) and save them
+    - [x] - Make an option of config that will save it in a config.json file where you'd specify what data do you want. If there's a need to only read one thing then use the arguments
 
 
 - [X] - Parsing the data in Python (!)
