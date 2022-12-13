@@ -5,6 +5,7 @@ try:
     import os, sys
     import getopt
     import json
+    from os.path import exists
     from influxdb_client import InfluxDBClient
     from dotenv import load_dotenv
     from csv import DictReader
@@ -25,42 +26,55 @@ except Exception as err:
 
 # main using the arguments passed
 # bucket, measurement, fields, start_time, stop_time
+# all passed via a dictionary
+
+# ! Main
 def main(d):
 # Load variables
     load_dotenv()
     token = os.getenv('INFLUXDB_V2_TOKEN')
     org = os.getenv('INFLUXDB_V2_ORG')
     url = os.getenv('INFLUXDB_V2_URL')
-    # make the variables below be set by arguments instead of .env
-    # args
-    # bucket_downsampled = os.getenv('bucket_downsampled') # done with args
-    # bucket_nmea2k = os.getenv('bucket_nmea2k') # done with args
-    # start_time = os.getenv('start_time') # done with args
-    # stop_time = os.getenv('stop_time') # done with args
     # Connect to DB
     client = InfluxDBClient.from_env_properties()
     query_api = client.query_api()
+    
 
-
-    # * Check if the reset or config flag has beed checked
-    # if d['reset'] == True:
-    #     #delete config
-    #     print('tehe')
-    # if d['config'] == True:
-    #     #make a new config
-    #     createConfig()
-
-
-    ##
-    #   Query the DB for data
-    ##
 
     # Check if the bucket was given via args if not then use config
-    if d == '':
-        #read config
-        print("No bucket?")
+    if not d:
+        if exists("config.json"):
+            with open("config.json") as input:
+                if not input:
+                    print("The config file is empty. Use -c to create one!")
+                    return
+                configjson = json.load(input)
+        else:
+            print("The config file doesn't exist. Use -c to create one!")
+            return
+        dflist = []
+        columns = []
+        for element in configjson:
+            dflist.append(queryIDBToDF(element['bucket'], element['start_time'], element['stop_time'], element['measurement'], element['field']))
+            column = "_" + element['measurement'] + "_" + element['field']
+            columns.append(column)
+
+        
+        
+        plotDF(mergeDF(dflist), columns)
+
+
+    elif d.get("reset") == True:
+        print("You'll now delete the config file")
+        os.remove('config.json')
+        print("Config succesfully removed, use -c to make a new one!")
+        return
+    elif d['config'] == True:
+        createConfig()
+        return
     else:
-        print("ok")
+        os.system("cls")
+        print("Reading data from the arguments...")
         #read from arguments
         bucket = d['bucket']
         measurement = d['measurement']
@@ -71,15 +85,14 @@ def main(d):
         columnname = "_" + measurement + "_" + field
         #use the data from the arguments to get the data and plot it
         data = queryIDBToDF(bucket, start_time, stop_time, measurement, field)
-
         plotDF(data, columnname)
         return
 
 
     # Make an array of the dataframes and merge them
-    dfarray = []
-    mergedRes = mergeDF(dfarray)
-    print(mergedRes) # debug
+    # dfarray = []
+    # mergedRes = mergeDF(dfarray)
+    # print(mergedRes) # debug
 
 
 
@@ -112,7 +125,6 @@ def readArgs(argv):
             d['reset'] = True
         elif opt in('-c'):
             d['config'] = True
-            createConfig()
         print(d)
 
     
@@ -139,7 +151,8 @@ if __name__ == "__main__":
     try:
         # read arguments
         readArgs(sys.argv[1:])
-        time.sleep(10)
+
+        time.sleep(2)
 
     except (ValueError, KeyError, AttributeError, IndexError) as err:
         print(err)

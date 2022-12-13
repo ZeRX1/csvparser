@@ -17,7 +17,7 @@
             "name": "pargs",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": ".\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "-b",
@@ -37,7 +37,7 @@
             "name": "Python: bieżący plik",
             "type": "python",
             "request": "launch",
-            "program": "python ${file} -b nmea2k -m Wind_Data -f aws -p -15d -s -20d",
+            "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true
         }

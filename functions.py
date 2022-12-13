@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import json
 import matplotlib.pyplot as plt
+import time
 from influxdb_client import InfluxDBClient, Point, WriteOptions, Dialect
 import pandas as pd
 client = InfluxDBClient.from_env_properties()
@@ -58,50 +59,48 @@ def mergeDF(dflist):
 def createConfig():
     
     print("Welcome to config creator!")
-    config = {
-        'ip': input("Please enter IP and port of influxDB (template: http://127.0.0.1:8086/): \n"),
-        'org': input("Please enter Organisation name of influxDB: \n"),
-        'token': input("Please enter Token from influxDB \nLog in to influx -> ⬆ -> API Tokens -> Generate API Token\n"),
-        'buckets': []
-        }
-    bucket_amount = int(input("How many buckets do you want to plot? (INT): \n"))
-
-    configjsonstr = json.dumps(config)
-    configjson = json.loads(configjsonstr)
+    print("For editing credentials use the .env file!")
+    bucket_amount = int(input("How many buckets do you want to plot? \n"))
+    buckets = []
     if bucket_amount > 1:
-        print('Now I\'ll ask you to input information needed')
         while bucket_amount > 0:
-            template_bucket = {
+            print(str(bucket_amount) + " left to assign")
+            buckets.append(({
             'bucket': input("What's the name of the bucket? \n"),
             'measurement': input("What's the name of the measurement? \n"),
             'field': input("What's the name of the field \n"),
             'start_time': input("What's the earliest you want to see? \n"),
             'stop_time': input("What's the latest you want to see? \n")
-            }
+            }))
             os.system('cls')
-            configjson["buckets"].append(template_bucket)
+
             bucket_amount -= 1
     else:
-        template_bucket = {
+        buckets.append(({
             'bucket': input("What's the name of the bucket?"),
             'measurement': input("What's the name of the measurement?"),
             'field': input("What's the name of the field"),
             'start_time': input("What's the earliest you want to see?"),
-            'stop_time': input("What's the latest you want to see?")}
-        configjson["buckets"].append(template_bucket)
+            'stop_time': input("What's the latest you want to see?")
+            }))
+            
         
     with open('config.json', 'w') as outfile:
-        json.dump(configjsonstr, outfile)
+        outfile.write(json.dumps(tuple(buckets),indent=4))
     print("Config succesfully created!")
+    print("Restart the script with no arguments to use config as data used!")
+    time.sleep(5)
     return
     
 
 
-def plotDF(DF, columnname):
+def plotDF(DF, columnnames):
     # plotting the graph
-
-    legend = []
-    plt.plot(DF._timestamp, DF[columnname])
+    legend = columnnames
+    i = 0
+    for df in DF:
+        plt.plot(df._timestamp, columnnames[i])
+        i += 1
     plt.legend(legend)
     plt.xlabel('Date')
     plt.ylabel('Values')
