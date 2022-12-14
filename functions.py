@@ -94,14 +94,13 @@ def createConfig():
     
 
 
-def plotDF(DF, columnnames):
+def plotDF(DFs, columnnames):
     # plotting the graph
-    legend = columnnames
     i = 0
-    for df in DF:
+    for df in DFs:
         plt.plot(df._timestamp, columnnames[i])
         i += 1
-    plt.legend(legend)
+    plt.legend(columnnames)
     plt.xlabel('Date')
     plt.ylabel('Values')
     plt.title('Load Cell data')
