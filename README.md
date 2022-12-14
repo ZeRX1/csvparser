@@ -1,5 +1,15 @@
 #Current priority:
 
+- [ ] - Custom config files
+- [ ] - Read json from argument
+- [ ] - Repair time
+- [ ] - Tags
+
+- [ ] - Exporting CSV with argument
+- [ ] - Different axises for every dataframe in plotting
+- [ ] - No plotting argument
+- [ ] - Wiki
+
 - [x] - Use it as script with arguments (!)
     - [x] - Make help
     - [x] - First time setup thing, if the script doesn't detect a config file (.env; config.ini) it'll create one and ask for data needed for the script to run (DB ip, token, org, what buckets etc.) and save them
