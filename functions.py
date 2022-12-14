@@ -98,10 +98,8 @@ def plotDF(DFs, columnnames):
     # plotting the graph
     i = -1
     for df in DFs:
-        print (df)
         plt.plot(DFs._timestamp, DFs[f'{columnnames[i]}'])
         i += 1
-    print(columnnames)
     plt.legend(columnnames)
     plt.xlabel('Date')
     plt.ylabel('Values')
