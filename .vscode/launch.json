@@ -5,12 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "args, test",
+            "type": "python",
+            "request": "launch",
+            "program": ".\\main.py",
+            "args": ["-c","no_code"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "comfig",
             "type": "python",
             "request": "launch",
             "program": ".\\main.py",
             "console": "integratedTerminal",
-            "args": ["-c"],
+            "args": [
+                "-c"
+            ],
             "justMyCode": true
         },
         {
@@ -26,9 +37,9 @@
                 "Wind_Data",
                 "-f",
                 "aws",
-                "-p",
-                "2022-11-28T10:00:00Z",
                 "-s",
+                "2022-11-28T10:00:00Z",
+                "-p",
                 "2022-12-10T10:00:00Z"
             ],
             "justMyCode": true

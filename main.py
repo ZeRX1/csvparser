@@ -39,9 +39,9 @@ def main(d):
     client = InfluxDBClient.from_env_properties()
     query_api = client.query_api()
     
+    print(d.get('config'))
 
-
-    # Check if the bucket was given via args if not then use config
+    # Handling arguments
     if not d:
         if exists("config.json"):
             with open("config.json") as input:
@@ -71,36 +71,39 @@ def main(d):
     elif d.get("config") == True:
         createConfig()
         return
-    else:
+    elif d.get('bucket'):
         os.system("cls")
         print("Reading data from the arguments...")
         #read from arguments
-        bucket = d['bucket']
-        measurement = d['measurement']
-        field = d['field']
-        start_time = d['start_time']
-        stop_time = d['stop_time']
-
-        columnname = measurement + "_" + field
+        bucket = d.get('bucket')
+        measurement = d.get('measurement')
+        field = d.get('field')
+        start_time = d.get('start_time')
+        stop_time = d.get('stop_time')
+        #do funny things for plotDF to work
+        columnname = [measurement + "_" + field]
         #use the data from the arguments to get the data and plot it
         data = queryIDBToDF(bucket, start_time, stop_time, measurement, field)
+        print(data)
         plotDF(data, columnname)
         return
+    elif d.get('json'):
+        json = json.load(d.get('json'))
+        dflist = []
+        columns = []
+        for element in json:
+            dflist.append(queryIDBToDF(element['bucket'], element['start_time'], element['stop_time'], element['measurement'], element['field']))
+            column = element['measurement'] + "_" + element['field']
+            columns.append(column)
 
-
-    # Make an array of the dataframes and merge them
-    # dfarray = []
-    # mergedRes = mergeDF(dfarray)
-    # print(mergedRes) # debug
-
-
-
+        mergedRes = mergeDF(dflist)
+        plotDF(mergedRes, columns)
     return 
 
 
 def readArgs(argv):
     try:
-        opts, args = getopt.getopt(argv, "b:m:f:p:s:oc")
+        opts, args = getopt.getopt(argv, "b:m:f:p:s:c:j:oe")
     except getopt.GetoptError as err:
         help_command()
         print(err) 
@@ -109,7 +112,6 @@ def readArgs(argv):
     #add this to an array/dictionary and send further
     d = dict()
     for opt, arg in opts:
-        print(opt, arg)
         if opt in ('-b'):
             d['bucket'] = arg
         elif opt in ('-m'):
@@ -123,10 +125,13 @@ def readArgs(argv):
         elif opt in('-o'):
             d['reset'] = True
         elif opt in('-c'):
-            d['config'] = True
-        print(d)
-
-    
+            d['config'] = arg
+        elif opt in('-e'):
+            d['export'] = True
+        elif opt in('-n'):
+            d['no_plot'] = True 
+        elif opt in('-j'):
+            d['json'] = arg
     main(d)
     return
 
@@ -154,7 +159,7 @@ if __name__ == "__main__":
         time.sleep(2)
 
     except (ValueError, KeyError, AttributeError, IndexError) as err:
-        print(err)
+        print(f"{err} Type={type(err)}")
     except TimeoutError as err:
         print("Is the IP correct? (.env)" + err)
     except Exception as err:

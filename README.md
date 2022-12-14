@@ -1,9 +1,11 @@
 #Current priority:
 
 - [ ] - Custom config files
+    - Only available when using an argument
 - [ ] - Read json from argument
-- [ ] - Repair time
+- [x] - Repair time
 - [ ] - Tags
+    - Make them available as an option not for them to be there always
 
 - [ ] - Exporting CSV with argument
 - [ ] - Different axises for every dataframe in plotting
