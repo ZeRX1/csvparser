@@ -56,12 +56,11 @@ def main(d):
         columns = []
         for element in configjson:
             dflist.append(queryIDBToDF(element['bucket'], element['start_time'], element['stop_time'], element['measurement'], element['field']))
-            column = "_" + element['measurement'] + "_" + element['field']
+            column = element['measurement'] + "_" + element['field']
             columns.append(column)
 
-        
-        
-        plotDF(mergeDF(dflist), columns)
+        mergedRes = mergeDF(dflist)
+        plotDF(mergedRes, columns)
 
 
     elif d.get("reset") == True:
@@ -82,7 +81,7 @@ def main(d):
         start_time = d['start_time']
         stop_time = d['stop_time']
 
-        columnname = "_" + measurement + "_" + field
+        columnname = measurement + "_" + field
         #use the data from the arguments to get the data and plot it
         data = queryIDBToDF(bucket, start_time, stop_time, measurement, field)
         plotDF(data, columnname)

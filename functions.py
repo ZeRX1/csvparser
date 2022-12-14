@@ -24,7 +24,7 @@ def dataToDF(data):
             oneresulttable.append(line.get_value())
             tables.append(oneresulttable)
             # Name the columns for merging later
-            value_name = "_" + line.get_measurement() + "_" + line.get_field()
+            value_name = line.get_measurement() + "_" + line.get_field()
             columns.append(value_name)
     
     return pd.DataFrame(tables, columns=["_timestamp", value_name])
@@ -96,10 +96,12 @@ def createConfig():
 
 def plotDF(DFs, columnnames):
     # plotting the graph
-    i = 0
+    i = -1
     for df in DFs:
-        plt.plot(df._timestamp, columnnames[i])
+        print (df)
+        plt.plot(DFs._timestamp, DFs[f'{columnnames[i]}'])
         i += 1
+    print(columnnames)
     plt.legend(columnnames)
     plt.xlabel('Date')
     plt.ylabel('Values')
