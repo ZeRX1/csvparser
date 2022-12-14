@@ -68,7 +68,7 @@ def main(d):
         os.remove('config.json')
         print("Config succesfully removed, use -c to make a new one!")
         return
-    elif d['config'] == True:
+    elif d.get("config") == True:
         createConfig()
         return
     else:
