@@ -38,8 +38,6 @@ def main(d):
     # Connect to DB
     client = InfluxDBClient.from_env_properties()
     query_api = client.query_api()
-    
-    print(d.get('config'))
 
     # Handling arguments
     if not d:
@@ -49,6 +47,7 @@ def main(d):
                     print("The config file is empty. Use -c to create one!")
                     return
                 configjson = json.load(input)
+                print(configjson)
         else:
             print("The config file doesn't exist. Use -c to create one!")
             return
@@ -88,10 +87,26 @@ def main(d):
         plotDF(data, columnname)
         return
     elif d.get('json'):
-        json = json.load(d.get('json'))
+        # write the data to a temp file and then read it as json
+# {"bucket":"nmea2k","measurement":"Wind_Data","field":"aws","start_time":"-22d","stop_time": "-10d"},{"bucket":"nmea2k","measurement":"Wind_Data","field":"awd","start_time":"-22d","stop_time":"-10d"}
+
+        with open('temp.json', 'w') as outfile:
+            outfile.write(json.dumps(tuple(d.get('json')),indent=4))
+        jsondata = d.get('json')
+        try:
+            jsondata = jsondata.replace("\'", "\"")
+            jsondata = json.loads(jsondata)
+        except (AttributeError, json.decoder.JSONDecodeError, TypeError) as err:
+            print("Use single quotes!\nExample:\n\"[{'bucket':'bowl','measurement':'sticks'}]\"\n")
+            print(f"{err} \n type: \n{type(err)}")
+            help_command()
+            raise
+
         dflist = []
         columns = []
-        for element in json:
+        print(jsondata)
+        for element in jsondata:
+            print(element)
             dflist.append(queryIDBToDF(element['bucket'], element['start_time'], element['stop_time'], element['measurement'], element['field']))
             column = element['measurement'] + "_" + element['field']
             columns.append(column)
@@ -103,7 +118,7 @@ def main(d):
 
 def readArgs(argv):
     try:
-        opts, args = getopt.getopt(argv, "b:m:f:p:s:c:j:oe")
+        opts, args = getopt.getopt(argv, "b:m:f:p:s:cj:oe")
     except getopt.GetoptError as err:
         help_command()
         print(err) 
@@ -125,12 +140,13 @@ def readArgs(argv):
         elif opt in('-o'):
             d['reset'] = True
         elif opt in('-c'):
-            d['config'] = arg
+            d['config'] = True
         elif opt in('-e'):
             d['export'] = True
         elif opt in('-n'):
             d['no_plot'] = True 
         elif opt in('-j'):
+            
             d['json'] = arg
     main(d)
     return
@@ -139,13 +155,14 @@ def help_command():
     print("Help")
     print("python main.py [options]")
     print("Here's the list of possible arguments:")
-    print("-b - \t<bucket>\t Choose a bucket from the db to use by the script")
-    print("-m - \t<measurement>\t Choose a measurement from the bucket to use by the script")
-    print("-f - \t<field>\t\t Choose a field from the measurement to use by the script")
-    print("-p - \t<range_stop>\t Choose earliest time of the desired data (-<amount><d/h/m/s> / Unix / Absolute time range)")
-    print("-s - \t<range_start>\t Choose latest time of the desired data (-<amount><d/h/m/s> / Unix / Absolute time range)")
-    print("-o - \t\t\t Reset config")
-    print("-c - \t\t\t Create config")
+    print("-b - \t<bucket>\t\t Choose a bucket from the db to use by the script")
+    print("-m - \t<measurement>\t\t Choose a measurement from the bucket to use by the script")
+    print("-f - \t<field>\t\t\t Choose a field from the measurement to use by the script")
+    print("-p - \t<range_stop>\t\t Choose earliest time of the desired data (-<amount><d/h/m/s> / Unix / Absolute time range)")
+    print("-s - \t<range_start>\t\t Choose latest time of the desired data (-<amount><d/h/m/s> / Unix / Absolute time range)")
+    print("-o - \t\t\t\t Reset config")
+    print("-c - \t\t\t\t Create config")
+    print("-j - \t<json formatted data> \t Get a graph out of the data in JSON (If you want to see the template create config and check the file)")
     return
 
 ##*#

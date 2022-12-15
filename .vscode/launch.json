@@ -5,11 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "json",
+            "type": "python",
+            "request": "launch",
+            "program": ".\\main.py",
+            "args": ["-j", "[{'bucket':'nmea2k','measurement':'Wind_Data','field':'aws','start_time':'-22d','stop_time': '-10d'},{'bucket':'nmea2k','measurement':'Wind_Data','field':'awd','start_time':'-22d','stop_time':'-10d'}]"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "args, test",
             "type": "python",
             "request": "launch",
             "program": ".\\main.py",
-            "args": ["-c","no_code"],
+            "args": [
+                "-c",
+                "no_code"
+            ],
             "console": "integratedTerminal",
             "justMyCode": true
         },

@@ -57,7 +57,6 @@ def mergeDF(dflist):
     return dataframe1
 
 def createConfig():
-    
     print("Welcome to config creator!")
     print("For editing credentials use the .env file!")
     bucket_amount = int(input("How many buckets do you want to plot? \n"))
@@ -83,13 +82,11 @@ def createConfig():
             'start_time': input("What's the earliest you want to see?"),
             'stop_time': input("What's the latest you want to see?")
             }))
-            
-        
     with open('config.json', 'w') as outfile:
         outfile.write(json.dumps(tuple(buckets),indent=4))
     print("Config succesfully created!")
     print("Restart the script with no arguments to use config as data used!")
-    time.sleep(5)
+    time.sleep(2)
     return
     
 

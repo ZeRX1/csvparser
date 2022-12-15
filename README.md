@@ -1,8 +1,9 @@
 #Current priority:
 
+- [ ] - Change the system of the arguments
 - [ ] - Custom config files
     - Only available when using an argument
-- [ ] - Read json from argument
+- [ ] - Read json from argument (uhhhhh yes)
 - [x] - Repair time
 - [ ] - Tags
     - Make them available as an option not for them to be there always
